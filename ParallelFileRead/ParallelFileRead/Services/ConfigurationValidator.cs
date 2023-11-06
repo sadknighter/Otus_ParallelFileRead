@@ -40,7 +40,7 @@ namespace ParallelFileRead.Services
 
         private void ThrowException(string keyName, string? sectionName)
         {
-            sectionName = sectionName ?? "root";
+            sectionName ??= "root";
             var exception = new MissingFieldException($"{ERROR_STRING_PART} , {keyName}.{sectionName}");
             _logger.LogError(0, exception, exception.Message);
             throw exception;
