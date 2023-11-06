@@ -2,10 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ParallelFileRead.Interfaces;
 using ParallelFileRead.Services;
 using Serilog;
-
-Console.WriteLine("Hello, World!");
 
 IConfigurationBuilder builder = new ConfigurationBuilder();
 AppSettingsBuilder.BuildConfig(builder);
@@ -18,18 +17,24 @@ Log.Logger = new LoggerConfiguration()
 
 Log.Logger.Information("Application Starting");
 
-//var host = Host.CreateDefaultBuilder()
-//    .ConfigureServices((context, services) =>
-//    {
-//        services.AddTransient<IConsoleUiService, ConsoleUiService>();
-//        services.AddTransient<IDigitGenerator, DigitGenerator>();
-//        services.AddTransient<IGuessValidator, GuessValidator>();
-//    })
-//    .UseSerilog()
-//    .Build();
+var host = Host.CreateDefaultBuilder()
+    .ConfigureServices((context, services) =>
+    {
+        services.AddTransient<IAppSettingsReader, AppSettingsReader>();
+        services.AddTransient<IAppSettingsChanger, AppSettingsChanger>();
+        services.AddTransient<IFilesGenerator, FilesGenerator>();
+        services.AddTransient<ISymbolCounter, SymbolCounter>();
+        services.AddTransient<IParallelFileActionService, ParallelFileActionService>();
+        services.AddTransient<IFileActionService, FileActionService>();
+        services.AddTransient<IConfigurationValidator, ConfigurationValidator>();
+        services.AddTransient<IConsoleUiService, ConsoleUiService>();
+    })
+    .UseSerilog()
+    .Build();
 
-//var svc = ActivatorUtilities.CreateInstance<ConsoleUiService>(host.Services);
-//svc.Run();
+var svc = ActivatorUtilities.CreateInstance<ConsoleUiService>(host.Services);
+svc.Run();
+
 
 /*
 * Прочитать 3 файла параллельно и вычислить количество пробелов в них (через Task).
