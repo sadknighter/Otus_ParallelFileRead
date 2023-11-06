@@ -25,5 +25,7 @@ jobs:
       working-directory: /home/runner/work/Otus_ParallelFileRead/Otus_ParallelFileRead/ParallelFileRead
     - name: Build
       run: dotnet build --no-restore
+      working-directory: /home/runner/work/Otus_ParallelFileRead/Otus_ParallelFileRead/ParallelFileRead
     - name: Test
       run: dotnet test --no-build --verbosity normal
+      working-directory: /home/runner/work/Otus_ParallelFileRead/Otus_ParallelFileRead/ParallelFileRead
